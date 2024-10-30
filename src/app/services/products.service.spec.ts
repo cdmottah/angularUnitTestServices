@@ -4,21 +4,27 @@ import { ProductsService } from './products.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { CreateProductDTO, Product, UpdateProductDTO } from '@models/product.model';
 import { environment } from 'src/environments/environment';
-import { HttpStatusCode } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpStatusCode } from '@angular/common/http';
+import { TokenInterceptor } from '../interceptors/token.interceptor';
+import { TokenService } from './token.service';
 
 fdescribe('ProductsService', () => {
   let productsService: ProductsService;
   let httpController: HttpTestingController
+  let tokenService:TokenService
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [
-        ProductsService
+        ProductsService,
+        TokenService,
+        { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }
       ]
     });
     productsService = TestBed.inject(ProductsService);
     httpController = TestBed.inject(HttpTestingController);
+    tokenService = TestBed.inject(TokenService);
   });
 
   afterEach(() => {
@@ -34,6 +40,7 @@ fdescribe('ProductsService', () => {
     it('should return a product list', (doneFn) => {
       //Arrange
       const mockData: Product[] = generateManyProducts(3);
+      spyOn(tokenService, 'getToken').and.returnValue('123');
       //Act
       productsService.getAllSimple().subscribe((data) => {
         //Assert
@@ -45,6 +52,8 @@ fdescribe('ProductsService', () => {
       //httpConfig
       const url = `${environment.API_URL}/api/v1/products`
       const req = httpController.expectOne(url);
+      const {headers} = req.request
+      expect(headers.get('Authorization')).toEqual(`Bearer 123`)
       req.flush(mockData);
 
 
@@ -321,7 +330,7 @@ fdescribe('ProductsService', () => {
 
       //Act
       productsService.getOne(productId).subscribe({
-        error:(err)=> {
+        error: (err) => {
           //Assert
           expect(err).toEqual('El producto no existe')
           doneFn();
@@ -331,7 +340,7 @@ fdescribe('ProductsService', () => {
       //httpConfig
       const url = `${environment.API_URL}/api/v1/products/${productId}`;
       const req = httpController.expectOne(url);
-      req.flush(messageError,mockError);
+      req.flush(messageError, mockError);
 
       expect(req.request.method).toEqual('GET')
     })
@@ -347,7 +356,7 @@ fdescribe('ProductsService', () => {
 
       //Act
       productsService.getOne(productId).subscribe({
-        error:(err)=> {
+        error: (err) => {
           //Assert
           expect(err).toEqual('Algo esta fallando en el server')
           doneFn();
@@ -357,7 +366,7 @@ fdescribe('ProductsService', () => {
       //httpConfig
       const url = `${environment.API_URL}/api/v1/products/${productId}`;
       const req = httpController.expectOne(url);
-      req.flush(messageError,mockError);
+      req.flush(messageError, mockError);
 
       expect(req.request.method).toEqual('GET')
     })
@@ -373,7 +382,7 @@ fdescribe('ProductsService', () => {
 
       //Act
       productsService.getOne(productId).subscribe({
-        error:(err)=> {
+        error: (err) => {
           //Assert
           expect(err).toEqual('No estas permitido')
           doneFn();
@@ -383,7 +392,7 @@ fdescribe('ProductsService', () => {
       //httpConfig
       const url = `${environment.API_URL}/api/v1/products/${productId}`;
       const req = httpController.expectOne(url);
-      req.flush(messageError,mockError);
+      req.flush(messageError, mockError);
 
       expect(req.request.method).toEqual('GET')
     })
@@ -399,7 +408,7 @@ fdescribe('ProductsService', () => {
 
       //Act
       productsService.getOne(productId).subscribe({
-        error:(err)=> {
+        error: (err) => {
           //Assert
           expect(err).toEqual('Ups algo salio mal')
           doneFn();
@@ -409,7 +418,7 @@ fdescribe('ProductsService', () => {
       //httpConfig
       const url = `${environment.API_URL}/api/v1/products/${productId}`;
       const req = httpController.expectOne(url);
-      req.flush(messageError,mockError);
+      req.flush(messageError, mockError);
 
       expect(req.request.method).toEqual('GET')
     })
