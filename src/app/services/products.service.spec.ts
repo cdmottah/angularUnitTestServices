@@ -2,12 +2,13 @@ import { TestBed } from '@angular/core/testing';
 import { generateManyProducts, generateOneProduct } from '@models/product.mock'
 import { ProductsService } from './products.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { Product } from '@models/product.model';
+import { CreateProductDTO, Product } from '@models/product.model';
 import { environment } from 'src/environments/environment';
 
 fdescribe('ProductsService', () => {
   let productsService: ProductsService;
   let httpController: HttpTestingController
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
@@ -19,11 +20,16 @@ fdescribe('ProductsService', () => {
     httpController = TestBed.inject(HttpTestingController);
   });
 
+  afterEach(()=>{
+    httpController.verify();
+  })
+
   it('should be created', () => {
     expect(productsService).toBeTruthy();
   });
 
   describe('test for getAllSimple', () => {
+
     it('should return a product list', (doneFn) => {
       //Arrange
       const mockData: Product[] = generateManyProducts(3);
@@ -34,15 +40,19 @@ fdescribe('ProductsService', () => {
         // expect(data).toEqual(mockData)
         doneFn();
       })
+
+      //httpConfig
       const url = `${environment.API_URL}/api/v1/products`
       const req = httpController.expectOne(url);
       req.flush(mockData);
-      httpController.verify();
-      //httpConfig
+
+
     })
+
   })
 
   describe('test for getAll', () => {
+
     it('should return a product list', (doneFn) => {
       //Arrange
       const mockData: Product[] = generateManyProducts(3);
@@ -58,7 +68,6 @@ fdescribe('ProductsService', () => {
       const url = `${environment.API_URL}/api/v1/products`
       const req = httpController.expectOne(url);
       req.flush(mockData);
-      httpController.verify();
 
     })
 
@@ -92,7 +101,7 @@ fdescribe('ProductsService', () => {
       const url = `${environment.API_URL}/api/v1/products`
       const req = httpController.expectOne(url);
       req.flush(mockData);
-      httpController.verify();
+
     })
 
     it('should send query params with limit 10 and offset 3', (doneFn) => {
@@ -101,7 +110,7 @@ fdescribe('ProductsService', () => {
       const limit = 10;
       const offset = 3;
       //Act
-      productsService.getAll(limit,offset).subscribe((data) => {
+      productsService.getAll(limit, offset).subscribe((data) => {
         //Assert
         expect(data.length).toEqual(mockData.length)
         // expect(data).toEqual(mockData)
@@ -113,10 +122,8 @@ fdescribe('ProductsService', () => {
       const req = httpController.expectOne(url);
       req.flush(mockData);
       const { params } = req.request
-       expect(params.get('limit')).toEqual(`${limit}`);
+      expect(params.get('limit')).toEqual(`${limit}`);
       expect(params.get('offset')).toEqual(`${offset}`);
-      const a = "esto es una prueba"
-      httpController.verify();
 
     })
 
@@ -126,7 +133,7 @@ fdescribe('ProductsService', () => {
       const limit = 0;
       const offset = 3;
       //Act
-      productsService.getAll(limit,offset).subscribe((data) => {
+      productsService.getAll(limit, offset).subscribe((data) => {
         //Assert
         expect(data.length).toEqual(mockData.length)
         // expect(data).toEqual(mockData)
@@ -138,10 +145,8 @@ fdescribe('ProductsService', () => {
       const req = httpController.expectOne(url);
       req.flush(mockData);
       const { params } = req.request
-       expect(params.get('limit')).toBeNull();
+      expect(params.get('limit')).toBeNull();
       expect(params.get('offset')).toBeNull();
-      const a = "esto es una prueba"
-      httpController.verify();
 
     })
 
@@ -151,7 +156,7 @@ fdescribe('ProductsService', () => {
       const limit = 10;
       const offset = 0;
       //Act
-      productsService.getAll(limit,offset).subscribe((data) => {
+      productsService.getAll(limit, offset).subscribe((data) => {
         //Assert
         expect(data.length).toEqual(mockData.length)
         // expect(data).toEqual(mockData)
@@ -163,10 +168,8 @@ fdescribe('ProductsService', () => {
       const req = httpController.expectOne(url);
       req.flush(mockData);
       const { params } = req.request
-       expect(params.get('limit')).toBeNull();
+      expect(params.get('limit')).toBeNull();
       expect(params.get('offset')).toBeNull();
-      const a = "esto es una prueba"
-      httpController.verify();
 
     })
 
@@ -176,7 +179,7 @@ fdescribe('ProductsService', () => {
       const limit = 10;
       const offset = undefined;
       //Act
-      productsService.getAll(limit,offset).subscribe((data) => {
+      productsService.getAll(limit, offset).subscribe((data) => {
         //Assert
         expect(data.length).toEqual(mockData.length)
         // expect(data).toEqual(mockData)
@@ -188,10 +191,39 @@ fdescribe('ProductsService', () => {
       const req = httpController.expectOne(url);
       req.flush(mockData);
       const { params } = req.request
-       expect(params.get('limit')).toBeNull();
+      expect(params.get('limit')).toBeNull();
       expect(params.get('offset')).toBeNull();
-      const a = "esto es una prueba"
-      httpController.verify();
+
+    })
+
+  })
+
+  describe('test for create', () => {
+
+    it('should return a new product', (doneFn) => {
+      //Arrange
+      const mockData = generateOneProduct();
+      const dto: CreateProductDTO = {
+        categoryId: 0,
+        title: 'title',
+        price: 0,
+        images: ['images1','images2'],
+        description: 'description'
+      }
+      //Act
+      productsService.create({...dto}).subscribe(response => {  // se envía ...dto para evitar que mute
+
+        expect(response).toEqual(mockData)
+        expect(req.request.body).toEqual(dto)
+        //Assert
+        doneFn();
+      })
+
+      //httpConfig
+      const url = `${environment.API_URL}/api/v1/products`
+      const req = httpController.expectOne(url);
+      req.flush(mockData);
+      expect(req.request.method).toEqual('POST')
 
     })
 
