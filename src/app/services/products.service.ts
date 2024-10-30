@@ -61,7 +61,7 @@ export class ProductsService {
       .pipe(
         catchError((error: HttpErrorResponse) => {
           if (error.status === HttpStatusCode.Conflict) {
-            return throwError('Algo esta fallando en el server');
+            return throwError(()=>'Algo esta fallando en el server');
           }
           if (error.status === HttpStatusCode.NotFound) {
             return throwError(()=>'El producto no existe');
