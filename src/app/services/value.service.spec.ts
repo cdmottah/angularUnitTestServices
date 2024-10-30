@@ -7,11 +7,12 @@ import { TestBed } from "@angular/core/testing";
 describe('Test for ValueService', () => {
   let service: ValueService;
 
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers:[ValueService]
     })
-    service = TestBed.inject(ValueService)
+    service = TestBed.inject(ValueService);
   })
 
   it('should be created', () => {
