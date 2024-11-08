@@ -1,11 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PersonComponent } from './person.component';
-import { DebugElement } from '@angular/core';
+import { Component, DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { Person } from '@models/person.model';
 
-describe('PersonComponent', () => {
+fdescribe('PersonComponent', () => {
   let component: PersonComponent;
   let fixture: ComponentFixture<PersonComponent>;
 
@@ -129,5 +129,16 @@ describe('PersonComponent', () => {
   })
 
 
+
+});
+
+@Component({
+  standalone: true,
+  template: ''
+})
+class HostComponent { }
+
+
+fdescribe('PersonComponent from HostComponent', () => {
 
 });

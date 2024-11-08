@@ -6,9 +6,9 @@ import { PeopleComponent } from './components/people/people.component';
 
 const routes: Routes = [
   // {path:'/home',component:HomeComponent},
-  { path: 'products', component: ProductsComponent },
-  { path: 'pico-preview', component: PicoPreviewComponent },
-  { path: 'people', component: PeopleComponent }
+  { path: 'products', component: ProductsComponent, pathMatch: 'prefix' },
+  { path: 'pico-preview', component: PicoPreviewComponent, pathMatch: 'prefix' },
+  { path: 'people', component: PeopleComponent, pathMatch: 'prefix' }
 ];
 
 @NgModule({
