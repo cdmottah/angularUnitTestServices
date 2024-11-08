@@ -9,9 +9,13 @@ import { Person } from '@models/person.model';
 export class PersonComponent implements OnInit {
 
   @Input() person!: Person;
+  imc = '';
   constructor() { }
 
   ngOnInit(): void {
   }
 
+  calcIMC(){
+    this.imc =this.person.calcIMC()
+  }
 }

@@ -56,6 +56,52 @@ fdescribe('PersonComponent', () => {
     expect(headingElement?.textContent).toContain("Andres")
   });
 
+  describe('test for calcIMC', () => {
+    it('should exist', () => {
+      expect(component.calcIMC).toBeTruthy();
+    })
+
+    it('should display a text with IMC when calcIMC is called', () => {
+      //Arrange
+      const expectedText = `overWeight level 3`
+      component.person = new Person('Sara', 'Valentina', 30, 120, 1.65)
+      const buttonElement = fixture.debugElement.query(By.css('button.btn-imc')).nativeElement as HTMLButtonElement | null;
+
+      //Act
+      component.calcIMC();
+      fixture.detectChanges();
+      //Assert
+      expect(buttonElement?.textContent).toContain(expectedText)
+    });
+  })
+
+  it('should display a text with IMC when do click', () => {
+    //Arrange
+    const expectedText = `overWeight level 3`
+    component.person = new Person('Sara', 'Valentina', 30, 120, 1.65)
+    const buttonDebug = fixture.debugElement.query(By.css('button.btn-imc'));
+    const buttonElement = buttonDebug.nativeElement as HTMLButtonElement;
+
+    //Act
+    buttonDebug.triggerEventHandler('click', null);
+    fixture.detectChanges();
+    //Assert
+    expect(buttonElement?.textContent).toContain(expectedText);
+  });
+
+  it('should calcIMC called once when do click', () => {
+    //Arrange
+    const mockElement = spyOn(component, 'calcIMC');
+    component.person = new Person('Sara', 'Valentina', 30, 120, 1.65)
+    const buttonDebug = fixture.debugElement.query(By.css('button.btn-imc'));
+
+    //Act
+    buttonDebug.triggerEventHandler('click', null);
+    fixture.detectChanges();
+    //Assert
+    expect(mockElement).toHaveBeenCalledTimes(1);
+  });
+
 
 
 });
