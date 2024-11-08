@@ -24,7 +24,8 @@ fdescribe('PersonComponent', () => {
   });
 
   it('should have <p> with "Soy un parrafo"', () => {
-    const personElement = fixture.nativeElement as HTMLElement;
+    const personDebug = fixture.debugElement;
+    const personElement = personDebug.nativeElement as HTMLElement;
     const p = personElement.querySelector<HTMLParagraphElement>('p');
     expect(p?.textContent).toEqual("Soy un parrafo")
   })
