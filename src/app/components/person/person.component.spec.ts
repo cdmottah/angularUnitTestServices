@@ -73,34 +73,60 @@ fdescribe('PersonComponent', () => {
       //Assert
       expect(buttonElement?.textContent).toContain(expectedText)
     });
+
+    it('should display a text with IMC when do click', () => {
+      //Arrange
+      const expectedText = `overWeight level 3`
+      component.person = new Person('Sara', 'Valentina', 30, 120, 1.65)
+      const buttonDebug = fixture.debugElement.query(By.css('button.btn-imc'));
+      const buttonElement = buttonDebug.nativeElement as HTMLButtonElement;
+
+      //Act
+      buttonDebug.triggerEventHandler('click', null);
+      fixture.detectChanges();
+      //Assert
+      expect(buttonElement?.textContent).toContain(expectedText);
+    });
+
+    it('should calcIMC called once when do click', () => {
+      //Arrange
+      const mockElement = spyOn(component, 'calcIMC');
+      component.person = new Person('Sara', 'Valentina', 30, 120, 1.65)
+      const buttonDebug = fixture.debugElement.query(By.css('button.btn-imc'));
+
+      //Act
+      buttonDebug.triggerEventHandler('click', null);
+      fixture.detectChanges();
+      //Assert
+      expect(mockElement).toHaveBeenCalledTimes(1);
+    });
   })
 
-  it('should display a text with IMC when do click', () => {
-    //Arrange
-    const expectedText = `overWeight level 3`
-    component.person = new Person('Sara', 'Valentina', 30, 120, 1.65)
-    const buttonDebug = fixture.debugElement.query(By.css('button.btn-imc'));
-    const buttonElement = buttonDebug.nativeElement as HTMLButtonElement;
+  describe('test for doClick', () => {
+    it('should exist', () => {
+      expect(component.calcIMC).toBeTruthy();
+    })
 
-    //Act
-    buttonDebug.triggerEventHandler('click', null);
-    fixture.detectChanges();
-    //Assert
-    expect(buttonElement?.textContent).toContain(expectedText);
-  });
+    it('should raise selected event when click', (doneFn) => {
+      //Arrange
+      const expectedPerson = new Person('Sara', 'Valentina', 30, 120, 1.65)
+      component.person = expectedPerson;
+      const buttonDebug = fixture.debugElement.query(By.css('button.btn-choose'));
 
-  it('should calcIMC called once when do click', () => {
-    //Arrange
-    const mockElement = spyOn(component, 'calcIMC');
-    component.person = new Person('Sara', 'Valentina', 30, 120, 1.65)
-    const buttonDebug = fixture.debugElement.query(By.css('button.btn-imc'));
+      let selectedPerson: Person | undefined;
+      component.onSelected.subscribe(person => {
+        selectedPerson = person;
 
-    //Act
-    buttonDebug.triggerEventHandler('click', null);
-    fixture.detectChanges();
-    //Assert
-    expect(mockElement).toHaveBeenCalledTimes(1);
-  });
+        //Assert
+        expect(expectedPerson).toEqual(selectedPerson)
+        doneFn();
+      });
+      //Act
+      buttonDebug.triggerEventHandler('click', null)
+      fixture.detectChanges();
+
+    })
+  })
 
 
 
