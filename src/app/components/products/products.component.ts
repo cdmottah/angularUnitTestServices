@@ -19,7 +19,7 @@ export class ProductsComponent implements OnInit {
   }
 
   getAllProducts() {
-    this._productsService.getAllSimple().subscribe(products => {
+    this._productsService.getAll().subscribe(products => {
       this.products = products
     })
   }
