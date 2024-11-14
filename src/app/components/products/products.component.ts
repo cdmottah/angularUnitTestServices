@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Product } from '@models/product.model';
 import { ProductsService } from '@services/products.service';
+import { ValueService } from '@services/value.service';
 
 @Component({
   selector: 'app-products',
@@ -13,8 +14,10 @@ export class ProductsComponent implements OnInit {
   limit = 10;
   offset = 0;
   status: 'loading' | 'success' | 'error' | 'init' = 'init'
+  promiseResponse = ''
   constructor(
-    private _productsService: ProductsService
+    private _productsService: ProductsService,
+    private _valueService: ValueService
   ) { }
 
   ngOnInit(): void {
@@ -36,6 +39,11 @@ export class ProductsComponent implements OnInit {
         }, 3000)
       }
     })
+  }
+
+  async callPromise(){
+    this.promiseResponse = await this._valueService.getPromiseValue();
+
   }
 
 }

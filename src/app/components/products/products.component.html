@@ -1,9 +1,10 @@
 <section class="container">
   <h2>Products Component</h2>
+  <h3>promiseResponse</h3>
+  <button (click)="callPromise()">call Promise</button>
+  <p>{{promiseResponse}}</p>
   <div class="my-grid">
-    <app-product
-      *ngFor="let product of products"
-      [product]="product">
+    <app-product *ngFor="let product of products" [product]="product">
 
     </app-product>
   </div>
