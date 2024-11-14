@@ -4,7 +4,7 @@ import { PeopleComponent } from './people.component';
 import { Person } from '@models/person.model';
 import { PersonComponent } from '../person/person.component';
 
-fdescribe('PeopleComponent', () => {
+describe('PeopleComponent', () => {
   let component: PeopleComponent;
   let fixture: ComponentFixture<PeopleComponent>;
 
