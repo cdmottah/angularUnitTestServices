@@ -5,19 +5,23 @@ import { generateManyProducts } from '@models/product.mock';
 import { ProductComponent } from '../product/product.component';
 import { ProductsComponent } from './products.component';
 import { ProductsService } from '@services/products.service';
+import { ValueService } from '@services/value.service';
 
 fdescribe('ProductsComponent', () => {
   let component: ProductsComponent;
   let fixture: ComponentFixture<ProductsComponent>;
   let productsServiceSpy: jasmine.SpyObj<ProductsService>
+  let valueServiceSpy: jasmine.SpyObj<ValueService>
   const productMocks = generateManyProducts(3);
 
   beforeEach(async () => {
     const _productsServiceSpy = jasmine.createSpyObj('ProductsService', ['getAll']);
+    const _ValueServiceSpy = jasmine.createSpyObj('ValueService', ['getPromiseValue']);
     await TestBed.configureTestingModule({
       declarations: [ProductsComponent, ProductComponent],
       providers: [
-        { provide: ProductsService, useValue: _productsServiceSpy }
+        { provide: ProductsService, useValue: _productsServiceSpy },
+        { provide: ValueService, useValue: _ValueServiceSpy }
       ]
     })
       .compileComponents();
@@ -27,6 +31,8 @@ fdescribe('ProductsComponent', () => {
     fixture = TestBed.createComponent(ProductsComponent);
     component = fixture.componentInstance;
     productsServiceSpy = TestBed.inject(ProductsService) as jasmine.SpyObj<ProductsService>
+    valueServiceSpy = TestBed.inject(ValueService) as jasmine.SpyObj<ValueService>
+
     productsServiceSpy.getAll.and.returnValue(of(productMocks))
     fixture.detectChanges(); // Aquí ya ejecutó el ngOnInit
   });
@@ -92,5 +98,20 @@ fdescribe('ProductsComponent', () => {
     }))
   })
 
+  describe('test for callPromise', () => {
+    // también puedes usar el fakeAsync y tick para este caso
+    it('should call to promise',async () => { // => aquí envolverías el fakeAsync
+      //Arrange
+      const mockMessage = 'mock message'
+      valueServiceSpy.getPromiseValue.and.returnValue(Promise.resolve(mockMessage))
+      //Act
+      await component.callPromise();
+      // => aquí llamarías el tick();
+      fixture.detectChanges();
+      //Assert
+      expect(component.promiseResponse).toEqual(mockMessage)
+      expect(valueServiceSpy.getPromiseValue).toHaveBeenCalledTimes(1)
+    });
+  })
 
 });
