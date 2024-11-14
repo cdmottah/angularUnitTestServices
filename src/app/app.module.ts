@@ -1,16 +1,18 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { ProductsComponent } from './components/products/products.component';
-import { PicoPreviewComponent } from './components/pico-preview/pico-preview.component';
+import { AppRoutingModule } from './app-routing.module';
+import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HighLightDirective } from './directives/high-light.directive';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { ReactiveFormsModule } from '@angular/forms';
-import { TokenInterceptor } from './interceptors/token.interceptor';
-import { PersonComponent } from './components/person/person.component';
+import { NgModule } from '@angular/core';
+import { OthersComponent } from './components/others/others.component';
 import { PeopleComponent } from './components/people/people.component';
+import { PersonComponent } from './components/person/person.component';
+import { PicoPreviewComponent } from './components/pico-preview/pico-preview.component';
 import { ProductComponent } from './components/product/product.component';
+import { ProductsComponent } from './components/products/products.component';
+import { TokenInterceptor } from './interceptors/token.interceptor';
+
 
 @NgModule({
   declarations: [
@@ -19,11 +21,14 @@ import { ProductComponent } from './components/product/product.component';
     PicoPreviewComponent,
     PersonComponent,
     PeopleComponent,
-    ProductComponent
+    ProductComponent,
+    OthersComponent,
+    HighLightDirective
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
+    FormsModule,
     ReactiveFormsModule,
     AppRoutingModule
   ],
