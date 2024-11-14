@@ -100,7 +100,7 @@ fdescribe('ProductsComponent', () => {
 
   describe('test for callPromise', () => {
     // también puedes usar el fakeAsync y tick para este caso
-    it('should call to promise',async () => { // => aquí envolverías el fakeAsync
+    it('should call to promise', async () => { // => aquí envolverías el fakeAsync
       //Arrange
       const mockMessage = 'mock message'
       valueServiceSpy.getPromiseValue.and.returnValue(Promise.resolve(mockMessage))
@@ -112,6 +112,23 @@ fdescribe('ProductsComponent', () => {
       expect(component.promiseResponse).toEqual(mockMessage)
       expect(valueServiceSpy.getPromiseValue).toHaveBeenCalledTimes(1)
     });
+
+
+    it('should be showed "mock message" in <p> element when button has been clicked', fakeAsync(() => {
+      //Arrange
+      const mockMessage = 'mock message'
+      valueServiceSpy.getPromiseValue.and.returnValue(Promise.resolve(mockMessage))
+      const buttonDebug = fixture.debugElement.query(By.css('button.test-button-promise'));
+      const paragraphDebug = fixture.debugElement.query(By.css('p.test-p-promise'));
+      const paragraphElement = paragraphDebug.nativeElement as HTMLParagraphElement
+      //Act
+      buttonDebug.triggerEventHandler('click', null);
+      tick();
+      fixture.detectChanges();
+      //Assert
+      expect(paragraphElement.textContent).toContain(mockMessage)
+      expect(valueServiceSpy.getPromiseValue).toHaveBeenCalledTimes(1)
+    }));
   })
 
 });
