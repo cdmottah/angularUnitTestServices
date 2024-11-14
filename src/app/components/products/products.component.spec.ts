@@ -1,10 +1,10 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ProductsComponent } from './products.component';
-import { ProductComponent } from '../product/product.component';
-import { ProductsService } from '@services/products.service';
-import { generateManyProducts } from '@models/product.mock';
-import { of } from 'rxjs';
 import { By } from '@angular/platform-browser';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { defer, of } from 'rxjs';
+import { generateManyProducts } from '@models/product.mock';
+import { ProductComponent } from '../product/product.component';
+import { ProductsComponent } from './products.component';
+import { ProductsService } from '@services/products.service';
 
 fdescribe('ProductsComponent', () => {
   let component: ProductsComponent;
@@ -58,11 +58,38 @@ fdescribe('ProductsComponent', () => {
       //Act
 
       //Assert
-      imgDebugElementList.forEach((imgDebugElement,index)=>{
+      imgDebugElementList.forEach((imgDebugElement, index) => {
         expect(imgDebugElement.attributes['src']).toEqual(productMocks[index].images[0])
       })
 
     })
+
+    it('should change the status flag from "loading" to "success" ', fakeAsync(() => {
+      //Arrange
+      const productMocks = generateManyProducts(10);
+      productsServiceSpy.getAll.and.returnValue(defer(() => Promise.resolve(productMocks)))
+      //Act
+      component.getAllProducts();
+      fixture.detectChanges();
+      expect(component.status).toEqual('loading')
+      tick(); // execute observables, setTimeOut, Promise  that there are pending, if is the function envolved by fakeAsync
+      fixture.detectChanges();
+      //Assert
+      expect(component.status).toEqual('success')
+    }))
+
+    it('should change the status flag from "loading" to "error" ', fakeAsync(() => {
+      //Arrange
+      productsServiceSpy.getAll.and.returnValue(defer(() => Promise.reject('error mocked')))
+      //Act
+      component.getAllProducts();
+      fixture.detectChanges();
+      expect(component.status).toEqual('loading')
+      tick(4000); // execute observables, setTimeOut, Promise  that there are pending, if is the function envolved by fakeAsync, for timeout is necesary to set a major time
+      fixture.detectChanges();
+      //Assert
+      expect(component.status).toEqual('error')
+    }))
   })
 
 
