@@ -10,17 +10,24 @@ import { ProductsService } from '@services/products.service';
 export class ProductsComponent implements OnInit {
 
   public products: Product[] = []
+  limit = 10;
+  offset = 0;
+  status: 'loading' | 'success' | 'error' | 'init' = 'init'
   constructor(
     private _productsService: ProductsService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.getAllProducts();
   }
 
   getAllProducts() {
-    this._productsService.getAll().subscribe(products => {
-      this.products = products
+    this.status = 'loading';
+
+    this._productsService.getAll(this.limit, this.offset).subscribe(products => {
+      this.products = [...this.products, ...products];
+      this.offset += this.limit;
+      this.status = 'success';
     })
   }
 

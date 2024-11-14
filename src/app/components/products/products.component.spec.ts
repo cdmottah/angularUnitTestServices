@@ -42,12 +42,13 @@ fdescribe('ProductsComponent', () => {
     it('should return a list of products from service', () => {
       //Arrange
       const productMocks = generateManyProducts(10);
+      const prevProducts = component.products
       productsServiceSpy.getAll.and.returnValue(of(productMocks))
       //Act
       component.getAllProducts();
       fixture.detectChanges();
       //Assert
-      expect(component.products.length).toEqual(productMocks.length)
+      expect(component.products.length).toEqual(productMocks.length + prevProducts.length)
     })
 
     it('should render a list of products from service', () => {
