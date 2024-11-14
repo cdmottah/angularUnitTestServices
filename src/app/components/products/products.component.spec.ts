@@ -74,14 +74,18 @@ fdescribe('ProductsComponent', () => {
       //Arrange
       const productMocks = generateManyProducts(10);
       productsServiceSpy.getAll.and.returnValue(defer(() => Promise.resolve(productMocks)))
+      const loadingButton = fixture.debugElement.query(By.css('button.test-getAllProducts'))
+      const buttonElement = loadingButton.nativeElement as HTMLButtonElement
       //Act
-      component.getAllProducts();
+      loadingButton.triggerEventHandler('click', null);
       fixture.detectChanges();
-      expect(component.status).toEqual('loading')
+      expect(component.status).toEqual('loading');
+      expect(buttonElement.textContent).toContain('Loading');
       tick(); // execute observables, setTimeOut, Promise  that there are pending, if is the function envolved by fakeAsync
       fixture.detectChanges();
       //Assert
-      expect(component.status).toEqual('success')
+      expect(component.status).toEqual('success');
+      expect(buttonElement.textContent).toContain('load More');
     }))
 
     it('should change the status flag from "loading" to "error" ', fakeAsync(() => {

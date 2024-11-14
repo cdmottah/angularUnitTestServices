@@ -8,7 +8,7 @@
 
     </app-product>
   </div>
-  <button (click)="getAllProducts()" [disabled]="status == 'loading'">
+  <button class ="test-getAllProducts" (click)="getAllProducts()" [disabled]="status == 'loading'">
     <span *ngIf="status == 'init' || status == 'success'">load More</span>
     <span *ngIf="status == 'loading'">Loading</span>
     <span *ngIf="status == 'error'">Error</span>
