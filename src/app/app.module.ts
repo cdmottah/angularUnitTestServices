@@ -12,6 +12,7 @@ import { PicoPreviewComponent } from './components/pico-preview/pico-preview.com
 import { ProductComponent } from './components/product/product.component';
 import { ProductsComponent } from './components/products/products.component';
 import { TokenInterceptor } from './interceptors/token.interceptor';
+import { ReservePipe } from './pipes/reserve.pipe';
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import { TokenInterceptor } from './interceptors/token.interceptor';
     PeopleComponent,
     ProductComponent,
     OthersComponent,
-    HighLightDirective
+    HighLightDirective,
+    ReservePipe
   ],
   imports: [
     BrowserModule,
