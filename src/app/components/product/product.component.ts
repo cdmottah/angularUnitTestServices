@@ -9,7 +9,17 @@ import { Product } from '@models/product.model';
 export class ProductComponent implements OnInit {
 
 
-  @Input() product! : Product
+  @Input() product : Product = {
+    id: '',
+    title: '',
+    price: 0,
+    images: [],
+    description: '',
+    category: {
+      id: 0,
+      name: ''
+    }
+  }
   constructor() { }
 
   ngOnInit(): void {

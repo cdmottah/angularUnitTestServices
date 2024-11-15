@@ -12,7 +12,7 @@ import { PicoPreviewComponent } from './components/pico-preview/pico-preview.com
 import { ProductComponent } from './components/product/product.component';
 import { ProductsComponent } from './components/products/products.component';
 import { TokenInterceptor } from './interceptors/token.interceptor';
-import { ReservePipe } from './pipes/reserve.pipe';
+import { ReversePipe } from './pipes/reverse.pipe';
 
 
 @NgModule({
@@ -25,7 +25,7 @@ import { ReservePipe } from './pipes/reserve.pipe';
     ProductComponent,
     OthersComponent,
     HighLightDirective,
-    ReservePipe
+    ReversePipe
   ],
   imports: [
     BrowserModule,

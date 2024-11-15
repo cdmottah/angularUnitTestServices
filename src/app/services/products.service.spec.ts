@@ -160,9 +160,9 @@ describe('ProductsService', () => {
 
     })
 
-    it('should dont send query params with limit 10 and offset 0', (doneFn) => {
+    it('should send query params with limit 10 and offset 0', (doneFn) => {
       //Arrange
-      const mockData: Product[] = generateManyProducts(7);
+      const mockData: Product[] = generateManyProducts(10);
       const limit = 10;
       const offset = 0;
       //Act
@@ -174,12 +174,12 @@ describe('ProductsService', () => {
       })
 
       //httpConfig
-      const url = `${environment.API_URL}/api/v1/products`
+      const url = `${environment.API_URL}/api/v1/products?limit=10&offset=0`
       const req = httpController.expectOne(url);
       req.flush(mockData);
       const { params } = req.request
-      expect(params.get('limit')).toBeNull();
-      expect(params.get('offset')).toBeNull();
+      expect(params.get('limit')).toBeTruthy();
+      expect(params.get('offset')).toBeTruthy();
 
     })
 
